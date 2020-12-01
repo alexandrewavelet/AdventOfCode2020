@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Controller@welcome')->name('welcome');
+
+Route::get('/day/{number}', 'Controller@day')
+    ->where('number', '[0-9]+')
+    ->name('day');
