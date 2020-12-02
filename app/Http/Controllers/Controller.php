@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factories\DayFactory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,6 +20,12 @@ class Controller extends BaseController
 
     public function day($number): View
     {
-        return view('day', ['number' => $number]);
+        try {
+            $day = DayFactory::create($number);
+        } catch (\Throwable $e) {
+            abort(404);
+        }
+
+        return view('day', ['number' => $number, 'day' => $day]);
     }
 }
