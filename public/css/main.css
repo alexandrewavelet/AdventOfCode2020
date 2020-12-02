@@ -52,3 +52,7 @@ html, body {
 .bold {
     font-weight: bold;
 }
+
+li {
+    list-style-type: none;
+}

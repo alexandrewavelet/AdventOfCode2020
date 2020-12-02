@@ -13,7 +13,7 @@ abstract class Day
      *
      * @var Collection
      */
-    private $dataset;
+    protected $dataset;
 
     public function __construct(Collection $dataset)
     {

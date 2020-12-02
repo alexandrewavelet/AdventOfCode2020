@@ -23,8 +23,11 @@ class DayFactory
             $storage->missing($file),
             new Exception('Day ' . $number . 'does not have a dataset')
         );
+
         $dataset = $storage->get($file);
         $dataset = collect(preg_split('/\r\n|\r|\n/', $dataset));
+        // Remove the last newline element
+        $dataset->pop();
 
         return new $class($dataset);
     }

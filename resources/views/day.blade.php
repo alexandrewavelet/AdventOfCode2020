@@ -18,16 +18,16 @@
 
                 <h1>Day {{ $number }}: {{ $day->title }}</h1>
 
-                {{ $day->description() }}
+                {!! $day->description() !!}
                 <a href="https://adventofcode.com/2020/day/{{ $number }}" target="_blank" rel="noopener noreferrer">
                     Read on Adventofcode
                 </a>
 
                 <h2>First puzzle</h2>
-                {{ $day->firstPuzzle() }}
+                {!! $day->firstPuzzle() !!}
 
                 <h2>Second puzzle</h2>
-                {{ $day->secondPuzzle() }}
+                {!! $day->secondPuzzle() !!}
 
                 <div class="links">
                     <a href="{{ route('welcome') }}">Return home</a>
