@@ -83,7 +83,7 @@ HTML;
         int $sum
     ): array {
         $operands = [];
-        $iterations_left = max(--$iteration, 0);
+        $iterations_left = --$iteration;
 
         foreach ($expenses as $expense) {
             $rest = $sum - $expense;
