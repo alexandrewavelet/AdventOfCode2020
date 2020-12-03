@@ -3,6 +3,7 @@
 namespace App\Days;
 
 use Exception;
+use Illuminate\Support\Collection;
 
 class One extends Day
 {
@@ -18,7 +19,7 @@ HTML;
     public function firstPuzzle(): string
     {
         try {
-            [$first, $second] = $this->find2020Sum();
+            [$first, $second] = $this->find2020SumForNElements(2);
         } catch (\Throwable $e) {dd($e);
             return <<<HTML
             <p>There was no expenses whose sum was equal to 2020 :'(</p>
@@ -36,27 +37,11 @@ HTML;
 HTML;
     }
 
-    public function find2020Sum(): array
-    {
-        $expenses = $this->dataset->sort();
-        $expenses = $expenses->combine($expenses);
-
-        foreach ($expenses as $expense) {
-            $rest = 2020 - $expense;
-
-            if ($expenses->has($rest)) {
-                return [$expense, $rest];
-            }
-        }
-
-        throw new Exception('No expenses adding to 2020');
-    }
-
     public function secondPuzzle(): string
     {
         try {
-            [$first, $second, $third] = $this->find2020SumFor3Elements();
-        } catch (\Throwable $e) {dd($e);
+            [$first, $second, $third] = $this->find2020SumForNElements(3);
+        } catch (\Throwable $e) {
             return <<<HTML
             <p>There was no expenses whose sum was equal to 2020 :'(</p>
 HTML;
@@ -74,23 +59,46 @@ HTML;
 HTML;
     }
 
-    public function find2020SumFor3Elements(): array
+    public function find2020SumForNElements(int $n): array
     {
-        $expenses = $this->dataset->sort();
-        $expenses = $expenses->combine($expenses);
+        throw_if($n < 1, new Exception('N needs to be greater than 2'));
+        throw_if(
+            $n > $this->dataset->count(),
+            new Exception('N is bigger than the number of expenses')
+        );
+
+        $expenses = $this->dataset->combine($this->dataset);
+
+        // n - 1 since one call returns 2 operands
+        $operands = $this->findSum($expenses, $n - 1, 2020);
+
+        throw_unless($operands, new Exception('No expenses adding to 2020'));
+
+        return $operands;
+    }
+
+    private function findSum(
+        Collection $expenses,
+        int $iteration,
+        int $sum
+    ): array {
+        $operands = [];
+        $iterations_left = max(--$iteration, 0);
 
         foreach ($expenses as $expense) {
-            $rest = 2020 - $expense;
+            $rest = $sum - $expense;
 
-            foreach ($expenses as $second_expense) {
-                $second_rest = $rest - $second_expense;
+            if ($iterations_left) {
+                $next_operands =$this->findSum($expenses, $iterations_left, $rest);
 
-                if ($expenses->has($second_rest)) {
-                    return [$expense, $second_expense, $second_rest];
+                if ($next_operands) {
+                    return array_merge([$expense], $next_operands);
                 }
+            } elseif ($expenses->has($rest)) {
+                return [$expense, $rest];
             }
         }
 
-        throw new Exception('No expenses adding to 2020');
+        return $operands;
     }
 }

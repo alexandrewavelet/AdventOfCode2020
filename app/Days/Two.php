@@ -2,8 +2,6 @@
 
 namespace App\Days;
 
-use Exception;
-
 class Two extends Day
 {
     public $title = 'Password Philosophy';
