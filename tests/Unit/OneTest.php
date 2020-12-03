@@ -14,11 +14,6 @@ class OneTest extends TestCase
 
         $this->assertEqualsCanonicalizing(
             [299, 1721],
-            $one->find2020SumForNElements(1)
-        );
-
-        $this->assertEqualsCanonicalizing(
-            [299, 1721],
             $one->find2020SumForNElements(2)
         );
 

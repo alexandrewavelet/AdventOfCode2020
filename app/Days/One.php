@@ -61,7 +61,7 @@ HTML;
 
     public function find2020SumForNElements(int $n): array
     {
-        throw_if($n < 1, new Exception('N needs to be greater than 2'));
+        throw_if($n < 2, new Exception('N needs to be greater than 1'));
         throw_if(
             $n > $this->dataset->count(),
             new Exception('N is bigger than the number of expenses')
