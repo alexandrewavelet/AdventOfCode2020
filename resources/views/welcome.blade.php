@@ -19,8 +19,9 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{ route('day', ['number' => 1]) }}">One</a>
-                    <a href="{{ route('day', ['number' => 2]) }}">Two</a>
+                    @foreach ($days as $number => $day)
+                        <a href="{{ route('day', ['number' => $number]) }}">{{ $day }}</a>
+                    @endforeach
                 </div>
 
                 <div class="links">
