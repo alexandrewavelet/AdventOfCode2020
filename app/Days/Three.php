@@ -24,9 +24,8 @@ HTML;
         $number_of_trees = $this->traverse($direction);
 
         return <<<HTML
-        <p>By sliding though the forest with direction
-            <b>($direction->right, $direction->down)</b>, we're going to
-            encounter $number_of_trees trees.
+        <p>By sliding though the forest with direction <b>($direction->right, $direction->down)</b>,
+            we're going to encounter <b>$number_of_trees trees</b>.
         </p>
 HTML;
     }
@@ -40,7 +39,7 @@ HTML;
             * $this->traverse(new Direction(1, 2));
 
         return <<<HTML
-        <p>This has absolutely no sense, but for all possible slopes we'll encounter <b>$multiplication</b> trees<p>
+        <p>This has absolutely no sense, but for all possible slopes we'll encounter <b>$multiplication trees</b> (which is a lot).<p>
 HTML;
     }
 
