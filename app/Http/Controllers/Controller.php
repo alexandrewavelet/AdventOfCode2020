@@ -34,7 +34,7 @@ class Controller extends BaseController
     {
         try {
             $day = DayFactory::create($number);
-        } catch (\Throwable $e) {dd($e->getMessage());
+        } catch (\Throwable $e) {
             abort(404);
         }
 
