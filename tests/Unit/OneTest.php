@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class OneTest extends TestCase
 {
     /** @test */
-    public function ifFinds2020SumForNElements(): void
+    public function itFinds2020SumForNElements(): void
     {
         $one = new One(collect([979, 2020, 366, 299, 675, 1456, 1721]));
 
