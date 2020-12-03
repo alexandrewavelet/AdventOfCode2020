@@ -15,7 +15,7 @@ class DayFactory
         $formatter = new NumberFormatter('en', NumberFormatter::SPELLOUT);
 
         $class = 'App\Days\\' . Str::pascal($formatter->format($number));
-        throw_if(!class_exists($class), new Exception('Day ' . $number . 'does not exists'));
+        throw_if(!class_exists($class), new Exception('Day ' . $number . ' does not exists'));
 
         $storage = Storage::disk('days');
         $file = $number . '.txt';

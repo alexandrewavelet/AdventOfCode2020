@@ -19,11 +19,17 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Never</a>
-                    <a href="https://laracasts.com">Gonna</a>
-                    <a href="https://laravel-news.com">Give</a>
-                    <a href="https://blog.laravel.com">You</a>
-                    <a href="https://nova.laravel.com">Up</a>
+                    @foreach ($days as $number => $day)
+                        <a href="{{ route('day', ['number' => $number]) }}">{{ $day }}</a>
+                    @endforeach
+                </div>
+
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Never</a>
+                    <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Gonna</a>
+                    <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Give</a>
+                    <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">You</a>
+                    <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Up</a>
                 </div>
             </div>
         </div>
