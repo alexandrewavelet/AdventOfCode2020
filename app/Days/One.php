@@ -38,60 +38,59 @@ HTML;
 
     public function find2020Sum(): array
     {
-        $first = $second = $sum = null;
-        $expenses = $this->dataset->sort()->toArray();
+        $expenses = $this->dataset->sort();
+        $expenses = $expenses->combine($expenses);
 
-        // While there's still expenses to process and that the sum isn't found yet
-        while (count($expenses) > 0 && $sum !== 2020) {
-            $first = array_shift($expenses);
-            $second = current($expenses);
+        foreach ($expenses as $expense) {
+            $rest = 2020 - $expense;
 
-            // While the array pointer isn't at the end of $expenses and that the sum isn't found yet
-            while (key($expenses) !== null && $sum !== 2020) {
-                $second = current($expenses);
-                $sum = $first + $second;
-
-                // Break the loop when total > 2020 (because expenses are sorted ASC)
-                if ($sum > 2020) {
-                    break;
-                }
-
-                next($expenses);
+            if ($expenses->has($rest)) {
+                return [$expense, $rest];
             }
         }
 
-        throw_if($sum !== 2020, new Exception('No expenses adding to 2020'));
-
-        return [$first, $second];
+        throw new Exception('No expenses adding to 2020');
     }
 
     public function secondPuzzle(): string
     {
-        return '';
+        try {
+            [$first, $second, $third] = $this->find2020SumFor3Elements();
+        } catch (\Throwable $e) {dd($e);
+            return <<<HTML
+            <p>There was no expenses whose sum was equal to 2020 :'(</p>
+HTML;
+        }
+        $multiplication = $first * $second * $third;
+
+        return <<<HTML
+        <p>The three expenses whose sum equals <b>2020</b> are:</p>
+        <ul>
+            <li>$first</li>
+            <li>$second</li>
+            <li>$third</li>
+        </ul>
+        <p>Their multiplication equals <b>$multiplication</b>.</p>
+HTML;
     }
 
-    /** @todo Day 1 part 2 */
-    public function find2020SumFor(int $n): array
+    public function find2020SumFor3Elements(): array
     {
-        throw_if($n < 2, new Exception('There is no addition!'));
+        $expenses = $this->dataset->sort();
+        $expenses = $expenses->combine($expenses);
 
-        $sum = null;
-        $n_range = range(0, $n - 1);
-        rsort($n_range);
-        $addition = range(0, $n - 1);
-        $expenses = $this->dataset->sort()->values()->toArray();
+        foreach ($expenses as $expense) {
+            $rest = 2020 - $expense;
 
-        while ($sum !== 2020) {
-            foreach ($n_range as $position) {
-                if ($addition[$position] < count($expenses) - 1) {
-                    $addition[$position]++;
+            foreach ($expenses as $second_expense) {
+                $second_rest = $rest - $second_expense;
+
+                if ($expenses->has($second_rest)) {
+                    return [$expense, $second_expense, $second_rest];
                 }
             }
-
-            $expenses_to_add = array_intersect_key($expenses, array_reverse($addition));
-            $sum = array_sum($expenses_to_add);
         }
 
-        return [];
+        throw new Exception('No expenses adding to 2020');
     }
 }

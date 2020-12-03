@@ -12,11 +12,11 @@ class OneTest extends TestCase
     {
         $one = new One(collect([1000, 1020]));
 
-        $this->assertEquals([1000, 1020], $one->find2020Sum());
+        $this->assertEqualsCanonicalizing([1000, 1020], $one->find2020Sum());
 
         $one = new One(collect([979, 366, 299, 675, 1456, 1721]));
 
-        $this->assertEquals([299, 1721], $one->find2020Sum());
+        $this->assertEqualsCanonicalizing([299, 1721], $one->find2020Sum());
     }
 
     /** @test */
@@ -29,11 +29,20 @@ class OneTest extends TestCase
     }
 
     /** @test */
-    // public function itFinds2020SumForNElements(): void
-    // {
-    //     $this->expectExceptionMessage('No expenses adding to 2020');
+    public function itFinds2020SumFor3Elements(): void
+    {
+        $one = new One(collect([10, 20, 1990]));
 
-    //     $one = new One(collect([979, 366, 299, 675, 1456, 1721]));
-    //     $one->find2020SumFor(3);
-    // }
+        $this->assertEqualsCanonicalizing(
+            [10, 20, 1990],
+            $one->find2020SumFor3Elements()
+        );
+
+        $one = new One(collect([979, 366, 299, 675, 1456, 1721]));
+
+        $this->assertEqualsCanonicalizing(
+            [979, 366, 675],
+            $one->find2020SumFor3Elements()
+        );
+    }
 }
