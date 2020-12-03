@@ -77,11 +77,7 @@ HTML;
         return $operands;
     }
 
-    private function findSum(
-        Collection $expenses,
-        int $iteration,
-        int $sum
-    ): array {
+    private function findSum(Collection $expenses, int $iteration, int $sum): array {
         $operands = [];
         $iterations_left = --$iteration;
 
