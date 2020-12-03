@@ -46,16 +46,12 @@ HTML;
     public function traverse(Direction $direction): int
     {
         $trees = 0;
-        $position = ['x' => 0, 'y' => 0];
-        $number_of_moves = ceil(($this->dataset->count() - 1) / $direction->down);
+        $moves = range(0, $this->dataset->count() -1, $direction->down);
 
-        for ($i = 1; $i <= $number_of_moves; $i++) {
-            $position['x'] += $direction->right;
-            $position['y'] += $direction->down;
+        while ($latitude = next($moves)) {
+            $latitude = $this->dataset->get($latitude);
 
-            $latitude = $this->dataset->get($position['y']);
-            $simulated_longitude = $position['x'] % strlen($latitude);
-
+            $simulated_longitude = ($direction->right * key($moves)) % strlen($latitude);
             $simulated_landing_position = substr($latitude, $simulated_longitude, 1);
 
             if ($simulated_landing_position === self::TREE) {
