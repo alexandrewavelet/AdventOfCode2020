@@ -22,7 +22,7 @@ class Controller extends BaseController
     {
         try {
             $day = DayFactory::create($number);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $e) {dd($e->getMessage());
             abort(404);
         }
 
