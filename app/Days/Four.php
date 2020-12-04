@@ -15,8 +15,12 @@ HTML;
 
     public function firstPuzzle(): string
     {
+        $valid_passports_count = $this->dataset->filter(function (string $passport) {
+            return $this->isPassportValid($passport);
+        })->count();
+
         return <<<HTML
-        <p>Ohoh</p>
+        <p>The number of valid passwords is <b>$valid_passports_count</b>.</p>
 HTML;
     }
 
@@ -27,9 +31,20 @@ HTML;
 HTML;
     }
 
-    public function isPassportValid(string $password): bool
+    public function isPassportValid(string $passport): bool
     {
-        return true;
+        return (bool)preg_match(
+            '/(?=\X*pid)(?=\X*ecl)(?=\X*eyr)(?=\X*hcl)(?=\X*byr)(?=\X*iyr)(?=\X*hgt)/',
+             $passport
+        );
+    }
+
+    public function isPassportFullyValid(string $passport): bool
+    {
+        return (bool)preg_match(
+            '/(?=\X*pid)(?=\X*ecl)(?=\X*eyr)(?=\X*hcl)(?=\X*byr)(?=\X*iyr)(?=\X*hgt)/',
+             $passport
+        );
     }
 
     public function getSplitDelimiterForDataset(): string
