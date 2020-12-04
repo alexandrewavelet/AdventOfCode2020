@@ -10,7 +10,7 @@ class TwoTest extends TestCase
     /** @test */
     public function itFindsWhetherPasswordAreValidPart1(): void
     {
-        $two = new Two(collect());
+        $two = new Two();
 
         $this->assertTrue($two->isPasswordValidPart1('1-3 a: abcde'));
         $this->assertTrue($two->isPasswordValidPart1('2-9 c: ccccccccc'));
