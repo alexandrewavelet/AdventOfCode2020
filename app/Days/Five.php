@@ -28,8 +28,18 @@ HTML;
 
     public function secondPuzzle(): string
     {
+        $seats = $this->dataset->map(function (string $row) {
+            return $this->findSeat($row)->seat_id;
+        })->sort()->values();
+
+        $seat_before_mine_index = $seats->search(function ($item, $key) use ($seats) {
+            return $seats->get($key + 1) - $item === 2;
+        });
+
+        $my_seat = $seats->get($seat_before_mine_index) + 1;
+
         return <<<HTML
-        <p>Ahah<p>
+        <p>I'm in seat <b>$my_seat</b>!<p>
 HTML;
     }
 
