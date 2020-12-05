@@ -15,9 +15,18 @@ abstract class Day
      */
     protected $dataset;
 
-    public function __construct(Collection $dataset)
+    public function __construct($dataset = null)
     {
-        $this->dataset = $dataset;
+        $this->dataset = $dataset instanceof Collection
+            ? $dataset
+            : collect(preg_split(
+                $this->getSplitDelimiterForDataset(),
+                $dataset
+            ));
+
+        if (!$this->dataset->last()) {
+            $this->dataset->pop();
+        }
     }
 
     abstract public function description(): string;
@@ -25,4 +34,9 @@ abstract class Day
     abstract public function firstPuzzle(): string;
 
     abstract public function secondPuzzle(): string;
+
+    protected function getSplitDelimiterForDataset(): string
+    {
+        return '/\r\n|\r|\n/';
+    }
 }

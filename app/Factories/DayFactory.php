@@ -25,9 +25,6 @@ class DayFactory
         );
 
         $dataset = $storage->get($file);
-        $dataset = collect(preg_split('/\r\n|\r|\n/', $dataset));
-        // Remove the last newline element
-        $dataset->pop();
 
         return new $class($dataset);
     }
