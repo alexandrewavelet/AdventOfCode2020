@@ -24,7 +24,7 @@
                     @endforeach
                 </div>
 
-                <div class="links">
+                <div class="links" style="margin-top: 50px;">
                     <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Never</a>
                     <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Gonna</a>
                     <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Give</a>
