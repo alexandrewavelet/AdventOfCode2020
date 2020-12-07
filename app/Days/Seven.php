@@ -29,8 +29,10 @@ HTML;
 
     public function secondPuzzle(): string
     {
+        $number_of_bags = $this->findHowManyBagsBagCanContain('shiny gold');
+
         return <<<HTML
-        <p>Ahah<p>
+        <p>A <b>shiny gold bag</b> bags can contain <b>$number_of_bags</b> bags.</p>
 HTML;
     }
 
@@ -38,12 +40,12 @@ HTML;
     {
         $this->bag_dict = $this->formatDataset();
 
-        return $this->bag_dict->map(function ($contains) use ($bag_to_find) {
-            return $this->hasBagIn($bag_to_find, $contains);
+        return $this->bag_dict->map(function ($bags) use ($bag_to_find) {
+            return $this->hasBagIn($bag_to_find, array_keys($bags));
         })->filter()->keys();
     }
 
-    public function hasBagIn(string $bag_to_find, array $bags_to_search) : bool
+    private function hasBagIn(string $bag_to_find, array $bags_to_search) : bool
     {
         if (in_array($bag_to_find, $bags_to_search)) {
             return true;
@@ -52,13 +54,33 @@ HTML;
         foreach ($bags_to_search as $bag) {
             if ($this->hasBagIn(
                 $bag_to_find,
-                $this->bag_dict->get($bag, [])
+                array_keys($this->bag_dict->get($bag, []))
             )) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function findHowManyBagsBagCanContain(string $bag): int
+    {
+        $this->bag_dict = $this->formatDataset();
+
+        $bag_contains = $this->bag_dict->get($bag);
+
+        return $this->sumBags($bag_contains);
+    }
+
+    private function sumBags(array $bags): int
+    {
+        $sum = 0;
+
+        foreach ($bags as $bag => $number) {
+            $sum += $number + $number * $this->sumBags($this->bag_dict->get($bag, []));
+        }
+
+        return $sum;
     }
 
     public function formatDataset()
@@ -76,12 +98,15 @@ HTML;
         foreach ($this->dataset as $key => $row) {
             $contained_bags = [];
             preg_match_all(
-                "/\d+ (\w* \w*) bags*/",
+                "/(\d+) (\w* \w*) bags*/",
                 $row,
                 $contained_bags
             );
 
-            $bags->put($bag_keys[$key], $contained_bags[1]);
+            $bags->put(
+                $bag_keys[$key],
+                array_combine($contained_bags[2], $contained_bags[1])
+            );
         }
 
         return $bags;
