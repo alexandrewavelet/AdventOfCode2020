@@ -19,8 +19,8 @@ HTML;
     public function firstPuzzle(): string
     {
         try {
-            [$first, $second] = $this->find2020SumForNElements(2);
-        } catch (\Throwable $e) {dd($e);
+            [$first, $second] = $this->findSumForNElements(2020, 2);
+        } catch (\Throwable $e) {
             return <<<HTML
             <p>There was no expenses whose sum was equal to 2020 :'(</p>
 HTML;
@@ -40,7 +40,7 @@ HTML;
     public function secondPuzzle(): string
     {
         try {
-            [$first, $second, $third] = $this->find2020SumForNElements(3);
+            [$first, $second, $third] = $this->findSumForNElements(2020, 3);
         } catch (\Throwable $e) {
             return <<<HTML
             <p>There was no expenses whose sum was equal to 2020 :'(</p>
@@ -59,7 +59,7 @@ HTML;
 HTML;
     }
 
-    public function find2020SumForNElements(int $n): array
+    public function findSumForNElements(int $sum, int $n): array
     {
         throw_if($n < 2, new Exception('N needs to be greater than 1'));
         throw_if(
@@ -70,9 +70,9 @@ HTML;
         $expenses = $this->dataset->combine($this->dataset);
 
         // n - 1 since one call returns 2 operands
-        $operands = $this->findSum($expenses, $n - 1, 2020);
+        $operands = $this->findSum($expenses, $n - 1, $sum);
 
-        throw_unless($operands, new Exception('No expenses adding to 2020'));
+        throw_unless($operands, new Exception('No sum found'));
 
         return $operands;
     }
