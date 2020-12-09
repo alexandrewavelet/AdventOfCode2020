@@ -15,27 +15,29 @@ HTML;
 
     public function firstPuzzle(): string
     {
-        $faulty_number = $this->checkWithPreamble(25);
+        $invalid_number = $this->checkWithPreamble(25);
 
         return <<<HTML
-        <p>The faulty number has been found! it's <b>$faulty_number</b>.</p>
+        <p>The invalid number has been found! it's <b>$invalid_number</b>.</p>
 HTML;
     }
 
     public function secondPuzzle(): string
     {
+        $weakness = $this->findEncryptionWeakness(25);
+
         return <<<HTML
-        <p>Ahah<p>
+        <p>Therefore, after moult péripéties, the encryption weakness number is <b>$weakness</b>.<p>
 HTML;
     }
 
     public function checkWithPreamble(int $preamble): int
     {
-        $faulty_number = 0;
+        $invalid_number = 0;
         $dataset = clone $this->dataset;
         $checklist = $dataset->splice(0, $preamble);
 
-        while (!$faulty_number) {
+        while (!$invalid_number) {
             $number_to_check = $dataset->shift();
 
             // AHAH GOTCHA, I ALREADY DID THAT SUM THING!
@@ -47,15 +49,50 @@ HTML;
                 $checklist->shift();
                 $checklist->push($number_to_check);
             } catch (\Throwable $e) {
-                $faulty_number = $number_to_check;
+                $invalid_number = $number_to_check;
             }
         }
 
-        return $faulty_number;
+        return $invalid_number;
     }
 
     public function findEncryptionWeakness(int $preamble): int
     {
-        return 0;
+        $encryption_key = 0;
+
+        $invalid_number = $this->checkWithPreamble($preamble);
+
+        $original_dataset = (clone $this->dataset)
+            ->slice(0, $this->dataset->search($invalid_number));
+        $dataset = $original_dataset->toArray();
+        $count = count($dataset);
+
+        while (
+            !$encryption_key
+            && ($lower_bound = key($dataset)) !== false
+        ) {
+            $upper_bound = $lower_bound + 1;
+
+            while (!$encryption_key && $upper_bound <= $count) {
+                $operands = $original_dataset->filter(
+                    function ($_, $key) use ($lower_bound, $upper_bound) {
+                        return $key >= $lower_bound && $key <= $upper_bound;
+                    }
+                );
+                $sum = $operands->sum();
+
+                if ($sum === $invalid_number) {
+                    $encryption_key = $operands->min() + $operands->max();
+                } elseif ($sum < $invalid_number) {
+                    $upper_bound++;
+                } else {
+                    break;
+                }
+            }
+
+            next($dataset);
+        }
+
+        return $encryption_key;
     }
 }
