@@ -14,21 +14,21 @@ class OneTest extends TestCase
 
         $this->assertEqualsCanonicalizing(
             [299, 1721],
-            $one->find2020SumForNElements(2)
+            $one->findSumForNElements(2020, 2)
         );
 
         $this->assertEqualsCanonicalizing(
             [979, 366, 675],
-            $one->find2020SumForNElements(3)
+            $one->findSumForNElements(2020, 3)
         );
     }
 
     /** @test */
     public function itThrowsExceptionWhenNo2020Sum(): void
     {
-        $this->expectExceptionMessage('No expenses adding to 2020');
+        $this->expectExceptionMessage('No sum found');
 
         $one = new One(collect([4, 8, 15, 16, 23, 42]));
-        $one->find2020SumForNElements(3);
+        $one->findSumForNElements(2020, 3);
     }
 }
